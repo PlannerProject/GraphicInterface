@@ -6,6 +6,7 @@ public class Main {
 		// TODO Auto-generated method stub
 
 		Planner planner = new Planner();
+		planner.setLocationRelativeTo(null);
 	}
 
 }
