@@ -1,28 +1,24 @@
 package project;
 
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-public class Planner {
+@SuppressWarnings("serial")
+public class Planner extends JFrame{
 
 	public Planner() {
 
-		JFrame f = new JFrame("Planner");
+		super("Planner");
+		//JFrame f = new JFrame("Planner");
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//f.setSize( 425, 200 );
+		//f.setLocationRelativeTo(null);
 		JPanel p = new JPanel();
 		p.setLayout(null);
 		p.setBackground(Color.white);
@@ -39,12 +35,26 @@ public class Planner {
 		list.setBounds(90, 26, 450, 50);
 		p.add(list);
 
+		//button for adding new member
 		JButton adding = new JButton("Add New Member");
 		adding.setFont(list.getFont().deriveFont(16.0f));
 		adding.setBackground(Color.ORANGE);
 		adding.setBorder(blackline);
 		adding.setBounds(650, 25, 175, 50);
+		adding.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JDialog dlgAddNewMember = new JDialog(Planner.this, "Add new member", true);
+				dlgAddNewMember.setSize( 600, 300 );
+				dlgAddNewMember.setLocationRelativeTo(null);
+				dlgAddNewMember.add(new AddNewMember());
+				dlgAddNewMember.setVisible(true);
+			}
+		});
 		p.add(adding);
+		
 
 		DefaultTableModel dm = new DefaultTableModel();
 		dm.setDataVector(
@@ -99,8 +109,8 @@ public class Planner {
 		progress.setBounds(650, 230, 175, 50);
 		p.add(progress);
 
-		f.add(p);
-		f.setSize(1000, 350);
-		f.setVisible(true);
+		this.add(p);
+		this.setSize(1000, 350);
+		this.setVisible(true);
 	}
 }
