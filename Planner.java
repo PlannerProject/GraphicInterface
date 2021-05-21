@@ -3,58 +3,67 @@ package project;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.Scanner;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+@SuppressWarnings("serial")
+public class Planner extends JFrame {
 
-public class Planner extends JFrame{
-
+	static JTextArea txtPeopleInTeam = new JTextArea();
+	
 	public Planner() {
 
 		super("Planner");
-		//JFrame f = new JFrame("Planner");
+		// JFrame f = new JFrame("Planner");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//f.setSize( 425, 200 );
-		//f.setLocationRelativeTo(null);
+		// f.setSize( 425, 200 );
+		// f.setLocationRelativeTo(null);
 		JPanel p = new JPanel();
 		p.setLayout(null);
 		p.setBackground(Color.white);
 
-		JLabel team = new JLabel("<html> <font color='red'>Team: </font></html>");
-		team.setFont(team.getFont().deriveFont(16.0f));
-		team.setBounds(30, 25, 50, 50);
-		p.add(team);
+		JLabel lblTeam = new JLabel("<html> <font color='red'>Team: </font></html>");
+		lblTeam.setFont(lblTeam.getFont().deriveFont(16.0f));
+		lblTeam.setBounds(30, 25, 50, 50);
+		p.add(lblTeam);
 
 		Border blackline = BorderFactory.createLineBorder(Color.black);
-		JLabel list = new JLabel("People in team", SwingConstants.CENTER);
-		list.setFont(list.getFont().deriveFont(16.0f));
-		list.setBorder(blackline);
-		list.setBounds(90, 26, 450, 50);
-		p.add(list);
 
-		//button for adding new member
+		setTeam();
+		txtPeopleInTeam.setEditable(false);
+		txtPeopleInTeam.setLineWrap(true);
+		txtPeopleInTeam.setWrapStyleWord(true);
+		txtPeopleInTeam.setFont(txtPeopleInTeam.getFont().deriveFont(16.0f));
+		txtPeopleInTeam.setBorder(blackline);
+		//txtPeopleInTeam.setBounds(90, 26, 450, 50);
+		JScrollPane scrp = new JScrollPane(txtPeopleInTeam);
+		scrp.setBounds(90, 26, 550, 50);
+		p.add(scrp);
+
+		// button for adding new member
 		JButton adding = new JButton("Add New Member");
-		adding.setFont(list.getFont().deriveFont(16.0f));
+		adding.setFont(txtPeopleInTeam.getFont().deriveFont(16.0f));
 		adding.setBackground(Color.ORANGE);
 		adding.setBorder(blackline);
-		adding.setBounds(650, 25, 175, 50);
+		adding.setBounds(720, 25, 175, 50);
 		adding.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				JDialog dlgAddNewMember = new JDialog(Planner.this, "Add new member", true);
 				dlgAddNewMember.setSize(600, 300);
 				dlgAddNewMember.setLocationRelativeTo(null);
-				dlgAddNewMember.add(new AddNewMember());
+				dlgAddNewMember.add(new AddNewMember(dlgAddNewMember));
 				dlgAddNewMember.setVisible(true);
 			}
 		});
 		p.add(adding);
-		
 
 		DefaultTableModel dm = new DefaultTableModel();
 		dm.setDataVector(
@@ -96,47 +105,38 @@ public class Planner extends JFrame{
 		p.add(table);
 
 		JButton addAss = new JButton("Add New Assignment");
-		addAss.setFont(list.getFont().deriveFont(16.0f));
+		addAss.setFont(txtPeopleInTeam.getFont().deriveFont(16.0f));
 		addAss.setBackground(Color.ORANGE);
 		addAss.setBorder(blackline);
 		addAss.setBounds(180, 230, 175, 50);
-		addAss.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				JDialog dlgAddAss = new JDialog(Planner.this, "Add new assignment", true);
-				dlgAddAss.setSize(815, 375);
-				dlgAddAss.setLocationRelativeTo(null);
-				dlgAddAss.add(new AddNewAssignment());
-				dlgAddAss.setVisible(true);
-				
-			}
-			
-		});
 		p.add(addAss);
 
 		JButton progress = new JButton("Check progress");
-		progress.setFont(list.getFont().deriveFont(16.0f));
+		progress.setFont(txtPeopleInTeam.getFont().deriveFont(16.0f));
 		progress.setBackground(Color.ORANGE);
 		progress.setBorder(blackline);
 		progress.setBounds(650, 230, 175, 50);
-		progress.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JDialog dlgCheckProgress = new JDialog(Planner.this, "Check Progress", true);
-				dlgCheckProgress.setSize(825, 375);
-				dlgCheckProgress.setLocationRelativeTo(null);
-				dlgCheckProgress.add(new Progress());
-				dlgCheckProgress.setVisible(true);
-				
-			}
-			
-		});
 		p.add(progress);
 
 		this.add(p);
 		this.setSize(1000, 350);
 		this.setVisible(true);
+	}
+	
+	public static void setTeam() {
+		String team = "";
+		try {
+			try (Scanner sc = new Scanner(new File("src/project/Team.txt"));) {
+				while (sc.hasNext()) {
+					team += sc.nextLine() + ", ";
+				}
+				if (team.length() > 2) {
+					team = team.substring(0, team.length() - 2);
+				}
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		txtPeopleInTeam.setText(team);
 	}
 }
