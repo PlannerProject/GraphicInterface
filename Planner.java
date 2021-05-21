@@ -109,6 +109,19 @@ public class Planner extends JFrame {
 		addAss.setBackground(Color.ORANGE);
 		addAss.setBorder(blackline);
 		addAss.setBounds(180, 230, 175, 50);
+		addAss.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JDialog dlgAddAss = new JDialog(Planner.this, "Add new assignment", true);
+				dlgAddAss.setSize(815, 375);
+				dlgAddAss.setLocationRelativeTo(null);
+				dlgAddAss.add(new AddNewAssignment());
+				dlgAddAss.setVisible(true);
+
+			}
+
+		});
 		p.add(addAss);
 
 		JButton progress = new JButton("Check progress");
@@ -116,6 +129,19 @@ public class Planner extends JFrame {
 		progress.setBackground(Color.ORANGE);
 		progress.setBorder(blackline);
 		progress.setBounds(650, 230, 175, 50);
+		progress.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JDialog dlgCheckProgress = new JDialog(Planner.this, "Check Progress", true);
+				dlgCheckProgress.setSize(825, 375);
+				dlgCheckProgress.setLocationRelativeTo(null);
+				dlgCheckProgress.add(new Progress());
+				dlgCheckProgress.setVisible(true);
+
+			}
+
+		});
 		p.add(progress);
 
 		this.add(p);
