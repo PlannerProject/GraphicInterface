@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Scanner;
+import java.util.TreeSet;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -15,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
 public class Planner extends JFrame {
 
 	static JTextArea txtPeopleInTeam = new JTextArea();
-	
+
 	public Planner() {
 
 		super("Planner");
@@ -40,9 +41,9 @@ public class Planner extends JFrame {
 		txtPeopleInTeam.setWrapStyleWord(true);
 		txtPeopleInTeam.setFont(txtPeopleInTeam.getFont().deriveFont(16.0f));
 		txtPeopleInTeam.setBorder(blackline);
-		//txtPeopleInTeam.setBounds(90, 26, 450, 50);
+		// txtPeopleInTeam.setBounds(90, 26, 450, 50);
 		JScrollPane scrp = new JScrollPane(txtPeopleInTeam);
-		scrp.setBounds(90, 26, 550, 50);
+		scrp.setBounds(90, 26, 500, 50);
 		p.add(scrp);
 
 		// button for adding new member
@@ -50,7 +51,7 @@ public class Planner extends JFrame {
 		adding.setFont(txtPeopleInTeam.getFont().deriveFont(16.0f));
 		adding.setBackground(Color.ORANGE);
 		adding.setBorder(blackline);
-		adding.setBounds(720, 25, 175, 50);
+		adding.setBounds(600, 25, 175, 50);
 		adding.addActionListener(new ActionListener() {
 
 			@Override
@@ -64,6 +65,26 @@ public class Planner extends JFrame {
 			}
 		});
 		p.add(adding);
+		
+		// button for adding new member
+				JButton btnRemoveMember = new JButton("Remove Member");
+				btnRemoveMember.setFont(txtPeopleInTeam.getFont().deriveFont(16.0f));
+				btnRemoveMember.setBackground(Color.ORANGE);
+				btnRemoveMember.setBorder(blackline);
+				btnRemoveMember.setBounds(790, 25, 175, 50);
+				btnRemoveMember.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						JDialog dlgRemoveMember = new JDialog(Planner.this, "Remove member", true);
+						dlgRemoveMember.setSize(700, 300);
+						dlgRemoveMember.setLocationRelativeTo(null);
+						dlgRemoveMember.add(new RemoveMember(dlgRemoveMember));
+						dlgRemoveMember.setVisible(true);
+					}
+				});
+				p.add(btnRemoveMember);
 
 		DefaultTableModel dm = new DefaultTableModel();
 		dm.setDataVector(
@@ -116,7 +137,7 @@ public class Planner extends JFrame {
 				JDialog dlgAddAss = new JDialog(Planner.this, "Add new assignment", true);
 				dlgAddAss.setSize(815, 375);
 				dlgAddAss.setLocationRelativeTo(null);
-				dlgAddAss.add(new AddNewAssignment());
+				dlgAddAss.add(new AddNewAssignment(dlgAddAss));
 				dlgAddAss.setVisible(true);
 
 			}
@@ -148,20 +169,15 @@ public class Planner extends JFrame {
 		this.setSize(1000, 350);
 		this.setVisible(true);
 	}
-	
+
 	public static void setTeam() {
 		String team = "";
-		try {
-			try (Scanner sc = new Scanner(new File("src/project/Team.txt"));) {
-				while (sc.hasNext()) {
-					team += sc.nextLine() + ", ";
-				}
-				if (team.length() > 2) {
-					team = team.substring(0, team.length() - 2);
-				}
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
+		TreeSet<String> set = Team.returnTeam();
+		for (String str : set) {
+			team += str + ", ";
+		}
+		if (team.length() > 2) {
+			team = team.substring(0, team.length() - 2);
 		}
 		txtPeopleInTeam.setText(team);
 	}
