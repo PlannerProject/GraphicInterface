@@ -1,13 +1,8 @@
 package project;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Assignment implements Serializable {
+public class Assignment {
 
 	private String name;
 	private String person;
@@ -21,45 +16,86 @@ public class Assignment implements Serializable {
 		this.initialDate = initialDate;
 		this.dueDate = dueDate;
 		this.status = status;
-		try {
-			try (
-					// Create an output stream for file Assignments.dat
-					ObjectOutputStream output = new ObjectOutputStream(
-							new FileOutputStream("src/project/Assignments.dat", true));) {
-				// Write this object to the object output stream
-				output.writeObject(this);
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-
-		System.out.println(allToString());
 	}
-
+	
 	public String toString() {
-		String s = "";
-		s += name + "\n";
-		s += person + "\n";
-		s += initialDate + "\n";
-		s += dueDate + "\n";
-		s += status + "\n";
-
+		String s = name + "\t";
+		s += person + "\t";
+		s += initialDate + "\t";
+		s += dueDate + "\t";
+		s += status;
 		return s;
 	}
 
-	public static String allToString() {
-		String s = "";
-		try {
-			try (ObjectInputStream input = new ObjectInputStream(new FileInputStream("src/project/Assignments.dat"));) {
-				int value;
-				while ((value = input.read()) != -1) {
-					Assignment assignment = (Assignment) input.readObject();
-					s += assignment.toString() + "\n";
-				}
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		return s;
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
 	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the person
+	 */
+	public String getPerson() {
+		return person;
+	}
+
+	/**
+	 * @param person the person to set
+	 */
+	public void setPerson(String person) {
+		this.person = person;
+	}
+
+	/**
+	 * @return the initialDate
+	 */
+	public LocalDate getInitialDate() {
+		return initialDate;
+	}
+
+	/**
+	 * @param initialDate the initialDate to set
+	 */
+	public void setInitialDate(LocalDate initialDate) {
+		this.initialDate = initialDate;
+	}
+
+	/**
+	 * @return the dueDate
+	 */
+	public LocalDate getDueDate() {
+		return dueDate;
+	}
+
+	/**
+	 * @param dueDate the dueDate to set
+	 */
+	public void setDueDate(LocalDate dueDate) {
+		this.dueDate = dueDate;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public boolean isStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+
+
 }
