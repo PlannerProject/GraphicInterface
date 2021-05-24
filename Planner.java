@@ -1,21 +1,40 @@
 package project;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 import java.util.TreeSet;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.border.Border;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("serial")
 public class Planner extends JFrame {
 
 	static JTextArea txtPeopleInTeam = new JTextArea();
+//	static JTable table = new JTable();
+	static JPanel pnl = new JPanel();
+
+	AssignmentTableModel tblModel;
 
 	public Planner() {
 
@@ -24,14 +43,14 @@ public class Planner extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// f.setSize( 425, 200 );
 		// f.setLocationRelativeTo(null);
-		JPanel p = new JPanel();
-		p.setLayout(null);
-		p.setBackground(Color.white);
+		// JPanel pnl = new JPanel();
+		pnl.setLayout(null);
+		pnl.setBackground(Color.white);
 
 		JLabel lblTeam = new JLabel("<html> <font color='red'>Team: </font></html>");
 		lblTeam.setFont(lblTeam.getFont().deriveFont(16.0f));
 		lblTeam.setBounds(30, 25, 50, 50);
-		p.add(lblTeam);
+		pnl.add(lblTeam);
 
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 
@@ -41,10 +60,9 @@ public class Planner extends JFrame {
 		txtPeopleInTeam.setWrapStyleWord(true);
 		txtPeopleInTeam.setFont(txtPeopleInTeam.getFont().deriveFont(16.0f));
 		txtPeopleInTeam.setBorder(blackline);
-		// txtPeopleInTeam.setBounds(90, 26, 450, 50);
 		JScrollPane scrp = new JScrollPane(txtPeopleInTeam);
 		scrp.setBounds(90, 26, 500, 50);
-		p.add(scrp);
+		pnl.add(scrp);
 
 		// button for adding new member
 		JButton adding = new JButton("Add New Member");
@@ -64,66 +82,34 @@ public class Planner extends JFrame {
 				dlgAddNewMember.setVisible(true);
 			}
 		});
-		p.add(adding);
-		
+		pnl.add(adding);
+
 		// button for adding new member
-				JButton btnRemoveMember = new JButton("Remove Member");
-				btnRemoveMember.setFont(txtPeopleInTeam.getFont().deriveFont(16.0f));
-				btnRemoveMember.setBackground(Color.ORANGE);
-				btnRemoveMember.setBorder(blackline);
-				btnRemoveMember.setBounds(790, 25, 175, 50);
-				btnRemoveMember.addActionListener(new ActionListener() {
+		JButton btnRemoveMember = new JButton("Remove Member");
+		btnRemoveMember.setFont(txtPeopleInTeam.getFont().deriveFont(16.0f));
+		btnRemoveMember.setBackground(Color.ORANGE);
+		btnRemoveMember.setBorder(blackline);
+		btnRemoveMember.setBounds(790, 25, 175, 50);
+		btnRemoveMember.addActionListener(new ActionListener() {
 
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						JDialog dlgRemoveMember = new JDialog(Planner.this, "Remove member", true);
-						dlgRemoveMember.setSize(700, 300);
-						dlgRemoveMember.setLocationRelativeTo(null);
-						dlgRemoveMember.add(new RemoveMember(dlgRemoveMember));
-						dlgRemoveMember.setVisible(true);
-					}
-				});
-				p.add(btnRemoveMember);
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JDialog dlgRemoveMember = new JDialog(Planner.this, "Remove member", true);
+				dlgRemoveMember.setSize(700, 300);
+				dlgRemoveMember.setLocationRelativeTo(null);
+				dlgRemoveMember.add(new RemoveMember(dlgRemoveMember));
+				dlgRemoveMember.setVisible(true);
+			}
+		});
+		pnl.add(btnRemoveMember);
 
-		DefaultTableModel dm = new DefaultTableModel();
-		dm.setDataVector(
-				new Object[][] {
-						{ "Name of Assignment", "Person in charge", "Initial Date", "Due Date", "Status of Assignment",
-								"Edit/remove Assignment" },
-						{ "Name", "Person 1", "Date 1", "Date 2", "Status", "Edit/remove" } },
-				new Object[] { " Name of Assignment", "Person in charge", "Initial Date", "Due Date",
-						"Status of Assignment", "Edit/remove assignment" });
-
-		JTable table = new JTable(dm);
-		table.setBounds(10, 100, 960, 100);
-		table.setFont(table.getFont().deriveFont(16.0f));
-		table.setBorder(blackline);
-
-		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-		centerRenderer.setVerticalAlignment(JLabel.CENTER);
-		table.getColumn("Edit/remove assignment").setCellRenderer(new ButtonRenderer());
-		table.getColumn("Edit/remove assignment").setCellEditor(new ButtonEditor(new JCheckBox()));
-
-		table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-		table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-		table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
-		table.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
-		table.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
-		table.getColumnModel().getColumn(5).setCellRenderer(centerRenderer);
-
-		table.setBackground(Color.lightGray);
-		table.setRowHeight(0, 60);
-		table.setRowHeight(1, 60);
-		table.getColumnModel().getColumn(0).setPreferredWidth(2000);
-		table.getColumnModel().getColumn(1).setPreferredWidth(2000);
-		table.getColumnModel().getColumn(2).setPreferredWidth(1300);
-		table.getColumnModel().getColumn(3).setPreferredWidth(1100);
-		table.getColumnModel().getColumn(4).setPreferredWidth(2000);
-		table.getColumnModel().getColumn(5).setPreferredWidth(2000);
-		p.add(new JScrollPane(table));
-		p.add(table);
+		tblModel = new AssignmentTableModel(loadFromFile());
+		JTable table = new JTable(tblModel);
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setBounds(10, 100, 960, 100);
+		table.setFillsViewportHeight(true);
+		add(scrollPane);
 
 		JButton addAss = new JButton("Add New Assignment");
 		addAss.setFont(txtPeopleInTeam.getFont().deriveFont(16.0f));
@@ -134,16 +120,29 @@ public class Planner extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JDialog dlgAddAss = new JDialog(Planner.this, "Add new assignment", true);
-				dlgAddAss.setSize(815, 375);
-				dlgAddAss.setLocationRelativeTo(null);
-				dlgAddAss.add(new AddNewAssignment(dlgAddAss));
-				dlgAddAss.setVisible(true);
-
+				new AddNewAssignment(Planner.this);
 			}
-
 		});
-		p.add(addAss);
+		pnl.add(addAss);
+
+		JButton btnRemoveAss = new JButton("Remove Assignment");
+		btnRemoveAss.setFont(txtPeopleInTeam.getFont().deriveFont(16.0f));
+		btnRemoveAss.setBackground(Color.ORANGE);
+		btnRemoveAss.setBorder(blackline);
+		btnRemoveAss.setBounds(370, 230, 175, 50);
+		btnRemoveAss.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int[] selected = table.getSelectedRows();
+				for (int i = 0; i < selected.length; i++) {
+					tblModel.list.remove(selected[i] - i);
+				}
+				tblModel.fireTableDataChanged();
+				save(tblModel.list);
+			}
+		});
+		pnl.add(btnRemoveAss);
 
 		JButton progress = new JButton("Check progress");
 		progress.setFont(txtPeopleInTeam.getFont().deriveFont(16.0f));
@@ -163,9 +162,9 @@ public class Planner extends JFrame {
 			}
 
 		});
-		p.add(progress);
+		pnl.add(progress);
 
-		this.add(p);
+		this.add(pnl);
 		this.setSize(1000, 350);
 		this.setVisible(true);
 	}
@@ -180,5 +179,111 @@ public class Planner extends JFrame {
 			team = team.substring(0, team.length() - 2);
 		}
 		txtPeopleInTeam.setText(team);
+	}
+
+	public void makeTable() {
+
+	}
+
+	class AssignmentTableModel extends AbstractTableModel {
+		Class<?>[] columnClass = new Class[] { String.class, String.class, LocalDate.class, LocalDate.class,
+				Boolean.class };
+		String[] columnNames = { "Name of Assignment", "Person in charge", "Initial Date", "Due Date",
+				"Status of Assignment" };
+		List<Assignment> list;
+
+		AssignmentTableModel(List<Assignment> list) {
+			this.list = list;
+		}
+
+		@Override
+		public int getRowCount() {
+			return list.size();
+		}
+
+		@Override
+		public int getColumnCount() {
+			return columnNames.length;
+		}
+
+		@Override
+		public String getColumnName(int columnIndex) {
+			return columnNames[columnIndex];
+		}
+
+		@Override
+		public Class<?> getColumnClass(int columnIndex) {
+			return String.class;// columnClass[columnIndex];
+		}
+
+		@Override
+		public boolean isCellEditable(int rowIndex, int columnIndex) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public Object getValueAt(int rowIndex, int columnIndex) {
+			switch (columnIndex) {
+			case 0:
+				return list.get(rowIndex).getName();
+			case 1:
+				return list.get(rowIndex).getPerson();
+			case 2:
+				return list.get(rowIndex).getInitialDate();
+			case 3:
+				return list.get(rowIndex).getDueDate();
+			case 4:
+				return list.get(rowIndex).isStatus()? "Completed" : "Uncompleted";
+			}
+			return "";
+		}
+
+	}
+
+	public void addToTable(Assignment a) {
+		tblModel.list.add(a);
+		tblModel.fireTableDataChanged();
+		save(tblModel.list);
+	}
+
+	public static List<Assignment> loadFromFile() {
+		ArrayList<Assignment> list = new ArrayList<Assignment>();
+		DateFormat DF = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			try (Scanner input = new Scanner(new File("src/project/Assignments.txt"));) {
+				while (input.hasNext()) {
+					try {
+						String[] ass = input.nextLine().split("\t");
+						Assignment assignment = new Assignment(ass[0], ass[1], convert(DF.parse(ass[2])),
+								convert(DF.parse(ass[3])), ass[4].equals("true") ? true:false);
+						list.add(assignment);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public static LocalDate convert(Date dateToConvert) {
+		return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
+	}
+
+	public void save(List<Assignment> list) {
+		File flAssignments = new File("src/project/Assignments.txt");
+
+		try {
+			try (PrintWriter p = new PrintWriter(new FileWriter(flAssignments, false));) {
+				for (Assignment assignment : list) {
+					p.print(assignment.toString() + "\n");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
