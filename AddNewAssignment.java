@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.util.*;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -13,18 +12,27 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
-public class AddNewAssignment extends JPanel {
+public class AddNewAssignment extends JDialog {
 
-	public AddNewAssignment(JDialog dlg) {
+	private static final long serialVersionUID = 2466213780045701241L;
+	Planner planner;
+
+	public AddNewAssignment(Planner planner) {
+		super(planner, "Add new assignment", true);
+		this.planner = planner;
+		this.setSize(815, 375);
+		this.setLocationRelativeTo(planner);
+		
+
 		JPanel panel = new JPanel();
-		setBackground(Color.WHITE);
-		setLayout(null);
+		panel.setBackground(Color.WHITE);
+		panel.setLayout(null);
+		add(panel); 
+		setBackground(Color.red);
 
 		Border blackline = BorderFactory.createLineBorder(Color.BLACK);
 
@@ -37,48 +45,47 @@ public class AddNewAssignment extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				dlg.dispose();
+				AddNewAssignment.this.dispose();
 			}
 		});
-		add(btnCancel);
+		panel.add(btnCancel);
 
 		JLabel lblNameOfAssignment = new JLabel("Name of Assignment", SwingConstants.CENTER);
 		lblNameOfAssignment.setFont(panel.getFont().deriveFont(Font.BOLD, 15.0f));
 		lblNameOfAssignment.setBorder(blackline);
 		lblNameOfAssignment.setBounds(30, 50, 160, 50);
-		add(lblNameOfAssignment);
+		panel.add(lblNameOfAssignment);
 
 		JLabel lblPerson = new JLabel("Person in Charge", SwingConstants.CENTER);
 		lblPerson.setFont(panel.getFont().deriveFont(Font.BOLD, 15.0f));
 		lblPerson.setBorder(blackline);
 		lblPerson.setBounds(190, 50, 140, 50);
-		add(lblPerson);
+		panel.add(lblPerson);
 
 		JLabel lblInitialDate = new JLabel("Initial Date", SwingConstants.CENTER);
 		lblInitialDate.setFont(panel.getFont().deriveFont(Font.BOLD, 15.0f));
 		lblInitialDate.setBorder(blackline);
 		lblInitialDate.setBounds(330, 50, 110, 50);
-		add(lblInitialDate);
+		panel.add(lblInitialDate);
 
 		JLabel lblDueDate = new JLabel("Due Date", SwingConstants.CENTER);
 		lblDueDate.setFont(panel.getFont().deriveFont(Font.BOLD, 15.0f));
 		lblDueDate.setBorder(blackline);
 		lblDueDate.setBounds(440, 50, 150, 50);
-		add(lblDueDate);
+		panel.add(lblDueDate);
 
 		JLabel lblStatus = new JLabel("Status of Assignment", SwingConstants.CENTER);
 		lblStatus.setFont(panel.getFont().deriveFont(Font.BOLD, 15.0f));
 		lblStatus.setBorder(blackline);
 		lblStatus.setBounds(590, 50, 175, 50);
-		add(lblStatus);
+		panel.add(lblStatus);
 
 		JTextField txtAssignment = new JTextField("Enter Name", SwingConstants.CENTER);
 		txtAssignment.setHorizontalAlignment(JTextField.CENTER);
 		txtAssignment.setFont(panel.getFont().deriveFont(Font.ITALIC, 14.0f));
 		txtAssignment.setBorder(blackline);
 		txtAssignment.setBounds(30, 100, 160, 100);
-		add(txtAssignment);
+		panel.add(txtAssignment);
 
 		JComboBox comboNames = new JComboBox(Team.returnTeam().toArray());
 		((JLabel) comboNames.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
@@ -86,7 +93,7 @@ public class AddNewAssignment extends JPanel {
 		comboNames.setFont(panel.getFont().deriveFont(Font.ITALIC, 16.0f));
 		comboNames.setBorder(blackline);
 		comboNames.setBounds(190, 100, 140, 100);
-		add(comboNames);
+		panel.add(comboNames);
 
 		LocalDate initialDate = LocalDate.now();
 		JLabel lblInitialDateValue = new JLabel(
@@ -95,25 +102,25 @@ public class AddNewAssignment extends JPanel {
 		lblInitialDateValue.setFont(panel.getFont().deriveFont(Font.ITALIC, 15.0f));
 		lblInitialDateValue.setBorder(blackline);
 		lblInitialDateValue.setBounds(330, 100, 110, 100);
-		add(lblInitialDateValue);
+		panel.add(lblInitialDateValue);
 
 		JLabel lblDay = new JLabel("D", SwingConstants.CENTER);
 		lblDay.setFont(panel.getFont().deriveFont(Font.BOLD, 15.0f));
 		lblDay.setBorder(blackline);
 		lblDay.setBounds(440, 100, 50, 40);
-		add(lblDay);
+		panel.add(lblDay);
 
 		JLabel lblMonth = new JLabel("M", SwingConstants.CENTER);
 		lblMonth.setFont(panel.getFont().deriveFont(Font.BOLD, 15.0f));
 		lblMonth.setBorder(blackline);
 		lblMonth.setBounds(490, 100, 50, 40);
-		add(lblMonth);
+		panel.add(lblMonth);
 
 		JLabel lblYear = new JLabel("Y", SwingConstants.CENTER);
 		lblYear.setFont(panel.getFont().deriveFont(Font.BOLD, 15.0f));
 		lblYear.setBorder(blackline);
 		lblYear.setBounds(540, 100, 50, 40);
-		add(lblYear);
+		panel.add(lblYear);
 
 		String[] days = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17",
 				"18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" };
@@ -123,7 +130,7 @@ public class AddNewAssignment extends JPanel {
 		comboDays.setFont(panel.getFont().deriveFont(Font.ITALIC, 16.0f));
 		comboDays.setBorder(blackline);
 		comboDays.setBounds(440, 140, 50, 60);
-		add(comboDays);
+		panel.add(comboDays);
 
 		String[] months = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" };
 		JComboBox comboMonths = new JComboBox(months);
@@ -132,7 +139,7 @@ public class AddNewAssignment extends JPanel {
 		comboMonths.setFont(panel.getFont().deriveFont(Font.ITALIC, 16.0f));
 		comboMonths.setBorder(blackline);
 		comboMonths.setBounds(490, 140, 50, 60);
-		add(comboMonths);
+		panel.add(comboMonths);
 
 		String[] years = { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15",
 				"16", "17", "18", "19", "20", "21", "22", "23", "24" };
@@ -142,7 +149,7 @@ public class AddNewAssignment extends JPanel {
 		comboYears.setFont(panel.getFont().deriveFont(Font.ITALIC, 16.0f));
 		comboYears.setBorder(blackline);
 		comboYears.setBounds(540, 140, 50, 60);
-		add(comboYears);
+		panel.add(comboYears);
 
 		String[] status = { "Completed", "Uncompleted" };
 		JComboBox comboStatus = new JComboBox(status);
@@ -151,7 +158,7 @@ public class AddNewAssignment extends JPanel {
 		comboStatus.setFont(panel.getFont().deriveFont(Font.ITALIC, 16.0f));
 		comboStatus.setBorder(blackline);
 		comboStatus.setBounds(590, 100, 175, 100);
-		add(comboStatus);
+		panel.add(comboStatus);
 
 		JButton btnSubmit = new JButton("Submit");
 		btnSubmit.setFont(panel.getFont().deriveFont(Font.BOLD, 16.0f));
@@ -168,9 +175,12 @@ public class AddNewAssignment extends JPanel {
 				boolean status = comboStatus.getSelectedItem().equals("Completed") ? true : false;
 				Assignment newAssignment = new Assignment(txtAssignment.getText(),
 						(String) comboNames.getSelectedItem(), initialDate, dueDate, status);
-				dlg.dispose();
+				AddNewAssignment.this.dispose();
+				planner.addToTable(newAssignment);
 			}
 		});
-		add(btnSubmit);
+		panel.add(btnSubmit);
+		
+		this.setVisible(true);
 	}
 }
